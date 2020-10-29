@@ -159,15 +159,7 @@
         datasets: [
           {
             data: [],
-            backgroundColor: [
-              '#ffcd56',
-              '#ff6384',
-              '#36a2eb',
-              '#fd6b19',
-              '#ed6b19',
-              '#cd6b19',
-              '#bd6b19',
-            ],
+            backgroundColor: [],
           },
         ],
         labels: [],
@@ -176,11 +168,11 @@
       var dataObj = {};
 
       function getBudget() {
-        axios.get('http://localhost:3000/budget').then(function (res) {
-          console.log(res);
-          for (var i = 0; i < res.data.myBudget.length; i++) {
-            dataSource.datasets[0].data[i] = res.data.myBudget[i].budget;
-            dataSource.labels[i] = res.data.myBudget[i].title;
+        axios.get('http://localhost:3000/api/budget').then(function (res) {
+          for (var i = 0; i < res.data.length; i++) {
+            dataSource.datasets[0].data[i] = res.data[i].budget;
+            dataSource.datasets[0].backgroundColor[i] = res.data[i].backgroundColor;
+            dataSource.labels[i] = res.data[i].title;
           }
           createChart();
         });
@@ -188,11 +180,10 @@
       getBudget();
 
       function getBudgetDoughnut() {
-        axios.get('http://localhost:3000/budget').then(function (res) {
-          console.log(res);
-          for (var i = 0; i < res.data.myBudget.length; i++) {
-            let title = res.data.myBudget[i].title;
-            let budget = res.data.myBudget[i].budget;
+        axios.get('http://localhost:3000/api/budget').then(function (res) {
+          for (var i = 0; i < res.data.length; i++) {
+            let title = res.data[i].title;
+            let budget = res.data[i].budget;
             dataObj[title] = budget;
           }
           createDoughnut();
@@ -292,7 +283,6 @@
           .enter()
           .append('text')
           .text(function (d) {
-            console.log(d.data.key);
             return d.data.key;
           })
           .attr('transform', function (d) {
